@@ -72,3 +72,4 @@ sudo systemctl start sonar
 sudo systemctl enable sonar
 sudo systemctl status sonar
 
+# Issue seen while running sonarqube:
