@@ -8,3 +8,4 @@ Process:
 - Configure the Database as per your requirement
 - Switch to Root User
 - Run the Debug Script
+- Access SonarQube UI via URL 127.0.0.1:9000
