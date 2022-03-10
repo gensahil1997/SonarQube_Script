@@ -9,3 +9,5 @@ Process:
 - Switch to Root User
 - Run the Debug Script
 - Access SonarQube UI via URL 127.0.0.1:9000
+- Default User: admin and Password: admin
+
