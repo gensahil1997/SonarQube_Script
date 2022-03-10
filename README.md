@@ -7,4 +7,4 @@ Process:
 - Install the Dependencies
 - Configure the Database as per your requirement
 - Switch to Root User
-- Run the Script
+- Run the Debug Script
