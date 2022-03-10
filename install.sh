@@ -35,16 +35,19 @@ sudo -i -u postgres psql -c "CREATE DATABASE sonarqube OWNER sonarqube;"
 echo -e "\nGranting privileges to sonarqube user on sonarqube DB\n"
 sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE "sonarqube" to sonarqube;"
 
-sudo wget -q https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.6.1.40680.zip
-sudo unzip sonarqube-8.9.1.44547.zip -d /opt/
+echo "Getting SonarQube"
+sudo wget -q https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.6.1.40680.zip 
+sudo unzip sonarqube-8.6.1.40680.zip -d  /opt/
+sudo chown -R sonarqube. /opt/sonarqube-8.6.1.40680
 
 echo "4"
 
-sudo sed -i -e 's/#sonar.jdbc.username=/sonar.jdbc.username=sonar/g' /opt/sonarqube/conf/sonar.properties
-sudo sed -i -e 's/#sonar.jdbc.password=/sonar.jdbc.password=sonarqube/g' /opt/sonarqube/conf/sonar.properties
-sudo sed -i -e 's/#sonar.jdbc.url=jdbc:postgresql/sonar.jdbc.url=jdbc:postgresql://localhost/sonardb/g' /opt/sonarqube/conf/sonar.properties
-sudo sed -i -e 's/#sonar.web.javaAdditionalOpts=/sonar.web.javaAdditionalOpts=-server/g' /opt/sonarqube/conf/sonar.properties
-sudo sed -i -e 's/#wrapper.java.command=/path/to/my/jdk/bin/java/wrapper.java.command=/usr/lib/jvm/java-11-openjdk-amd64/bin/java/g' /opt/s/conf/wrapper.conf
+sudo sed -i -e 's/#sonar.jdbc.username=/sonar.jdbc.username=sonarqube/g' /opt/sonarqube-8.6.1.40680/conf/sonar.properties
+sudo sed -i -e 's/#sonar.jdbc.password=/sonar.jdbc.password=sonarqube/g' /opt/sonarqube-8.6.1.40680/conf/sonar.properties
+sudo sed -i -e 's/#sonar.jdbc.url=jdbc:postgresql/=sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube/g' /opt/sonarqube-8.6.1.40680/conf/sonar.properties
+sudo sed -i -e 's/#sonar.web.javaAdditionalOpts=/sonar.web.javaAdditionalOpts=-server/g' /opt/sonarqube-8.6.1.40680/conf/sonar.properties
+sudo sed -i -e 's/#sonar.web.host=/sonar.web.host=127.0.0.1/g' /opt/sonarqube-8.6.1.40680/conf/sonar.properties
+sudo sed -i -e 's/#wrapper.java.command=/path/to/my/jdk/bin/java/wrapper.java.command=/usr/lib/jvm/java-11-openjdk-amd64/bin/java/g' /opt/sonarqube-8.6.1.40680/conf/wrapper.conf
 
 echo "5"
 
@@ -54,13 +57,12 @@ After=syslog.target network.target
 [Service]
 Type=forking
 
-ExecStart=
-ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
-ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+ExecStart=/opt/sonarqube-8.6.1.40680/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube-8.6.1.40680/bin/linux-x86-64/sonar.sh stop
 
 User=sonarqube
 Group=sonarqube
-Restart=on-failure
+Restart=always
 
 [Install]
 WantedBy=multi-user.target" | sudo tee /etc/systemd/system/sonar.service
